@@ -110,7 +110,7 @@ class Grader:
         if not lesson_task_id:
             self.log.debug(f"please provide lesson_task_id in grader_payload")
 
-        from ..panqueques_grader_1.grader import PanquequesGrader
+        from .panqueques_grader_1.grader import PanquequesGrader  # external repo
 
         grader = PanquequesGrader(lesson_task_id, student_response)
         return grader.grade()
