@@ -106,7 +106,19 @@ class Grader:
             return self.process_item(content)
 
     def grade(self, grader_path, grader_config, student_response):
-        raise NotImplementedError("no grader defined")
+        wrong_result = {
+            'score': 0,
+            'msg': "Something is incorrect, try again!",
+            'correct': False,  # Stepik ignores this key (may be omitted)
+        }
+
+        correct_result = {
+            'score': 1,
+            'msg': "Good job!",
+            'correct': False,  # Stepik ignores this key (may be omitted)
+        }
+
+        return correct_result if student_response == "42" else wrong_result
 
     def process_item(self, content, queue=None):
         try:
@@ -129,7 +141,7 @@ class Grader:
                 raise
 
             self.log.debug(f"Processing submission, grader payload: {payload}")
-            relative_grader_path = grader_config['grader']
+            relative_grader_path = ""
             grader_path = (self.grader_root / relative_grader_path).abspath()
             start = time.time()
             results = self.grade(grader_path, grader_config, student_response)
@@ -137,9 +149,10 @@ class Grader:
             statsd.histogram('xqueuewatcher.grading-time', time.time() - start)
 
             # Make valid JSON message
-            reply = {'correct': results['correct'],
-                     'score': results['score'],
-                     'msg': self.render_results(results)}
+            reply = {
+                'score': results['score'],
+                'msg': results['msg'],
+            }
 
             statsd.increment('xqueuewatcher.replies (non-exception)')
         except Exception as e:

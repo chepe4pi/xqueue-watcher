@@ -22,3 +22,5 @@ reports/
 \#*\#
 *.egg-info
 .idea/
+conf.d/conf.d/stepik.json
+.venv
