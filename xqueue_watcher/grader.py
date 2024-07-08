@@ -106,20 +106,14 @@ class Grader:
             return self.process_item(content)
 
     def grade(self, grader_path, grader_config, student_response):
-        if grader_config.get("lesson_task_id", None) is '3.2.1':
-            wrong_result = {
-                'score': 0,
-                'msg': "Something is incorrect, try again!",
-                'correct': False,  # Stepik ignores this key (may be omitted)
-            }
+        lesson_task_id = grader_config.get("lesson_task_id", None)
+        if not lesson_task_id:
+            self.log.debug(f"please provide lesson_task_id in grader_payload")
 
-            correct_result = {
-                'score': 1,
-                'msg': "Good job!",
-                'correct': False,  # Stepik ignores this key (may be omitted)
-            }
+        from ..panqueques_grader_1.grader import PanquequesGrader
 
-            return correct_result if student_response == "42" else wrong_result
+        grader = PanquequesGrader(lesson_task_id, student_response)
+        return grader.grade()
 
     def process_item(self, content, queue=None):
         try:
