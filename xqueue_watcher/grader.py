@@ -112,8 +112,8 @@ class Grader:
 
         from panqueques_grader_1.grader import PanquequesGrader  # external repo
 
-        grader = PanquequesGrader(lesson_task_id, student_response)
-        return grader.grade()
+        grader = PanquequesGrader()
+        return grader.grade(lesson_task_id, student_response)
 
     def process_item(self, content, queue=None):
         try:
