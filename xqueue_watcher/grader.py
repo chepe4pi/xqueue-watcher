@@ -9,6 +9,7 @@ from path import Path
 import logging
 import multiprocessing
 from statsd import statsd
+import requests
 
 
 def format_errors(errors):
