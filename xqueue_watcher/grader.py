@@ -109,13 +109,19 @@ class Grader:
     def grade(self, grader_path, grader_config, student_response):
         lesson_task_id = grader_config.get("lesson_task_id", None)
         if not lesson_task_id:
-            self.log.debug(f"please provide lesson_task_id in grader_payload")
+            self.log.error("please provide lesson_task_id in grader_payload")
+            return {'score': 0, 'msg': "Invalid request: missing lesson_task_id", 'correct': None}
 
-        response = requests.post('http://localhost:8001/grade/', json={'lesson_task_id': lesson_task_id,
-                                                                      'student_response': student_response})
-        if response.status_code != 200:
-            log.error(f"status code {response.status_code}")
+        try:
+            response = requests.post(
+                'http://localhost:8001/grade/',
+                json={'lesson_task_id': lesson_task_id, 'student_response': student_response}
+            )
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            self.log.error(f"HTTP Request failed: {e}")
             return {'score': 0, 'msg': "Сори, проблема на нашей стороне, мы уже разбираемся!", 'correct': None}
+
         return response.json()
 
     def process_item(self, content, queue=None):
