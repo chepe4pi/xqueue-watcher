@@ -115,6 +115,7 @@ class Grader:
                                                                       'student_response': student_response})
         if response.status_code != 200:
             log.error(f"status code {response.status_code}")
+            return {'score': 0, 'msg': "Сори, проблема на нашей стороне, мы уже разбираемся!", 'correct': None}
         return response.json()
 
     def process_item(self, content, queue=None):
