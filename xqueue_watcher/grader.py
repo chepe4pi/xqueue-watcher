@@ -111,7 +111,7 @@ class Grader:
         if not lesson_task_id:
             self.log.debug(f"please provide lesson_task_id in grader_payload")
 
-        response = requests.post('http://localhost:8001/grade', json={'lesson_task_id': lesson_task_id,
+        response = requests.post('http://localhost:8001/grade/', json={'lesson_task_id': lesson_task_id,
                                                                       'student_response': student_response})
         if response.status_code != 200:
             log.error(f"status code {response.status_code}")
