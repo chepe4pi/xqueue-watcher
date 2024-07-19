@@ -113,6 +113,9 @@ class Grader:
             return {'score': 0, 'msg': "Invalid request: missing lesson_task_id", 'correct': None}
 
         try:
+            import os
+            cwd = os.getcwd()
+            print('pwd', cwd)
             port = str(open('../../port', 'r').read()).strip()
             response = requests.post(
                 f'http://localhost:{port}/grade/',
