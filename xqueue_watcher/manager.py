@@ -98,6 +98,21 @@ class Manager:
             with open(watcher) as queue_config:
                 self.configure(json.load(queue_config))
 
+        self.configure(
+            {
+                os.environ.get('COURSE_ID'): {
+                    "SERVER": os.environ.get('COURSE_SERVER_URL'),
+                    "CONNECTIONS": 1,
+                    "AUTH": [os.environ.get('AUTH_LOGIN'), os.environ.get('AUTH_PASS')],
+                    "HANDLERS": [
+                        {
+                            "HANDLER": "xqueue_watcher.grader.Grader"
+                        }
+                    ]
+                }
+            }
+        )
+
     def enable_codejail(self, codejail_config):
         """
         Enable codejail for the process.
