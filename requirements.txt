@@ -1,0 +1,38 @@
+Django<4.0
+
+# elasticsearch>=7.14.0 includes breaking changes in it which caused issues in discovery upgrade process.
+# elastic search changelog: https://www.elastic.co/guide/en/enterprise-search/master/release-notes-7.14.0.html
+elasticsearch<7.14.0
+
+# django-simple-history>3.0.0 adds indexing and causes a lot of migrations to be affected
+django-simple-history==3.0.0
+
+# tox>4.0.0 isn't yet compatible with many tox plugins, causing CI failures in almost all repos.
+# Details can be found in this discussion: https://github.com/tox-dev/tox/discussions/1810
+tox<4.0.0
+
+# edx-sphinx-theme is not compatible with latest Sphinx==6.0.0 version
+# Pinning Sphinx version unless the compatibility issue gets resolved
+# For details, see issue https://github.com/openedx/edx-sphinx-theme/issues/197
+sphinx<6.0.0
+
+certifi==2022.12.7
+charset-normalizer==3.1.0
+dogstatsd-python==0.5.6
+idna==3.4
+newrelic==8.7.0
+path==16.6.0
+path-py==12.5.0
+requests==2.28.2
+six==1.16.0
+urllib3==1.26.15
+certifi==2022.12.7
+charset-normalizer==3.1.0
+dogstatsd-python==0.5.6
+idna==3.4
+newrelic==8.7.0
+path==16.6.0
+path-py==12.5.0
+requests==2.28.2
+six==1.16.0
+urllib3==1.26.15

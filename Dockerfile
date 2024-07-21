@@ -11,7 +11,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 WORKDIR /edx/app/xqueue_watcher
-COPY requirements /edx/app/xqueue_watcher/requirements
+COPY _requirements /edx/app/xqueue_watcher/requirements
 RUN pip install -r requirements/production.txt
 
 CMD python -m xqueue_watcher -d /edx/etc/xqueue_watcher

@@ -9,6 +9,6 @@ setup(
         'grader_support',
         'xqueue_watcher',
     ],
-    install_requires=open('requirements/production.txt',
+    install_requires=open('_requirements/production.txt',
                           'rt', encoding='utf-8').readlines(),
 )
