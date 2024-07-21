@@ -98,21 +98,22 @@ class Manager:
         for watcher in confd.files('*.json'):
             with open(watcher) as queue_config:
                 self.configure(json.load(queue_config))
-
-        self.configure(
-            {
-                os.environ.get('COURSE_ID'): {
-                    "SERVER": os.environ.get('COURSE_SERVER_URL'),
-                    "CONNECTIONS": 1,
-                    "AUTH": [os.environ.get('AUTH_LOGIN'), os.environ.get('AUTH_PASS')],
-                    "HANDLERS": [
-                        {
-                            "HANDLER": "xqueue_watcher.grader.Grader"
-                        }
-                    ]
+        course_id = os.environ.get('COURSE_ID', None)
+        if course_id:
+            self.configure(
+                {
+                    course_id: {
+                        "SERVER": os.environ.get('COURSE_SERVER_URL'),
+                        "CONNECTIONS": 1,
+                        "AUTH": [os.environ.get('AUTH_LOGIN'), os.environ.get('AUTH_PASS')],
+                        "HANDLERS": [
+                            {
+                                "HANDLER": "xqueue_watcher.grader.Grader"
+                            }
+                        ]
+                    }
                 }
-            }
-        )
+            )
 
     def enable_codejail(self, codejail_config):
         """
