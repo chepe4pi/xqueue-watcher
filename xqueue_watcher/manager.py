@@ -98,6 +98,7 @@ class Manager:
         for watcher in confd.files('*.json'):
             with open(watcher) as queue_config:
                 self.configure(json.load(queue_config))
+
         course_id = os.environ.get('COURSE_ID', None)
         if course_id:
             self.configure(
