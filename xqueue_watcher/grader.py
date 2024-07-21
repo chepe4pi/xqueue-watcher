@@ -114,9 +114,9 @@ class Grader:
             return {'score': 0, 'msg': "Invalid request: missing lesson_task_id", 'correct': None}
 
         try:
-            port = os.environ.get('PORT', 5498)
+            grader_url = os.environ.get('GRADER_URL', 'http://localhost:8521')
             response = requests.post(
-                f'http://localhost:{port}/grade/',
+                f'{grader_url}/grade/',
                 json={'lesson_task_id': lesson_task_id, 'student_response': student_response}
             )
             response.raise_for_status()
