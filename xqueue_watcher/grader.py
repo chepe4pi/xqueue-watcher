@@ -1,6 +1,7 @@
 """
 Implementation of a grader compatible with XServer
 """
+import os
 import html
 import sys
 import time
