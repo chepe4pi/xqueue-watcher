@@ -118,7 +118,7 @@ class Grader:
             response = requests.post(
                 f'{grader_url}/grade/',
                 json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
-                      'auth_key': os.environ.get('AUTH_KEY')}
+                      'AUTH_KEY': os.environ.get('AUTH_KEY')}
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
