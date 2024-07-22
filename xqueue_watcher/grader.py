@@ -11,6 +11,7 @@ import logging
 import multiprocessing
 from statsd import statsd
 import requests
+import environ
 
 
 def format_errors(errors):
