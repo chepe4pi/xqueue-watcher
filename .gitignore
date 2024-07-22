@@ -27,5 +27,5 @@ conf.d/conf.d/stepik.json
 panqueques_grader_1
 port
 .env
-xqueue_watcher/.auth_key
-xqueue_watcher/.grader_url
+.auth_key
+.grader_url
