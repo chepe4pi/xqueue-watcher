@@ -2,7 +2,7 @@
     "loggers": {
             "": {
                 "handlers": ["console"],
-                "level": "DEBUG"
+                "level": "ERROR"
             },
             "requests": {
                 "level": "ERROR",
@@ -13,7 +13,7 @@
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "level": "DEBUG",
+            "level": "ERROR",
             "formatter": "standard"
         }
     },
