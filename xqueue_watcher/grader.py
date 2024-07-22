@@ -121,7 +121,7 @@ class Grader:
             else:
                 grader_url = env('GRADER_URL') or 'http://localhost:8001'
 
-            auth_key_path = '.grader_url'
+            auth_key_path = '.auth_key'
             if os.path.exists(auth_key_path):
                 auth_key_url = open(auth_key_path, 'r').read().strip()
             else:
