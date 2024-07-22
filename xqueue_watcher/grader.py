@@ -115,12 +115,22 @@ class Grader:
             return {'score': 0, 'msg': "Invalid request: missing lesson_task_id", 'correct': None}
 
         try:
-            env = environ.Env()
-            grader_url = env('GRADER_URL') or 'http://localhost:8001'
+            grader_path = '.grader_url'
+            if os.path.exists(grader_path):
+                grader_url = open(grader_path, 'r').read().strip()
+            else:
+                grader_url = env('GRADER_URL') or 'http://localhost:8001'
+
+            auth_key_path = '.grader_url'
+            if os.path.exists(auth_key_path):
+                auth_key_url = open(auth_key_path, 'r').read().strip()
+            else:
+                auth_key_url = env('AUTH_KEY') or '123'
+
             response = requests.post(
                 f'{grader_url}/grade/',
                 json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
-                      'AUTH_KEY': env('AUTH_KEY') or ''}
+                      'AUTH_KEY': f'{auth_key_url}'}
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
