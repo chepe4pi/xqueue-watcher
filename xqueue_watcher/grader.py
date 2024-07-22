@@ -115,7 +115,6 @@ class Grader:
             return {'score': 0, 'msg': "Invalid request: missing lesson_task_id", 'correct': None}
 
         try:
-            print('os.getcwd()', os.getcwd())
             grader_path = '.grader_url'
             if os.path.exists(grader_path):
                 grader_url = open(grader_path, 'r').read().strip()
@@ -128,6 +127,10 @@ class Grader:
             else:
                 auth_key_url = os.environ.get('AUTH_KEY', '123')
 
+            print(grader_url)
+            print({'lesson_task_id': lesson_task_id, 'student_response': student_response,
+                      'AUTH_KEY': f'{auth_key_url}'}
+                  )
             response = requests.post(
                 f'{grader_url}/grade/',
                 json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
