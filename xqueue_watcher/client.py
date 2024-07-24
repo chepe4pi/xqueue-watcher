@@ -98,7 +98,7 @@ class XQueueClient:
                     return (False, "Could not log in")
             else:
                 message = "Received un expected response status code, {}, calling {}.".format(
-                    r.status_code,url)
+                    r.status_code, url)
                 log.error(message)
                 return (False, message)
 
@@ -110,7 +110,7 @@ class XQueueClient:
         response = self.session.request('post', url, auth=self.http_basic_auth, data={
             'username': self.username,
             'password': self.password,
-            })
+        })
         if response.status_code != 200:
             log.error('Log in error %s %s', response.status_code, response.content)
             return False
@@ -159,6 +159,15 @@ class XQueueClient:
             if success:
                 self.processing = True
                 success = self._handle_submission(content)
+# {"xqueue_header": "{\"submission_id\": 554475, \"submission_key\": \"df1803148682486836697ff600513ec4\",
+# \"stepik_user_id\": 415832026, \"stepik_submission_id\": 1250338561}", "xqueue_files": "",
+# "xqueue_body": "{\"student_response\": \"from django.http import HttpResponse\\ndef view_13(request):\\n
+# email = ''\\n    if request.method == 'POST':\\n
+# email = request.POST.get('email')\\n    elif request.method == 'GET':\\n
+# email = request.GET.get('email')\\n\\n    if email and ' ' not in email and '@'
+# in email and '.' in email:\\n
+# return HttpResponse('\\u0415\\u043c\\u0430\\u0439\\u043b \\u0432 \\u043f\\u043e\\u0440\\u044f\\u0434\\u0435')\\n
+# else:\\n        return HttpResponse('')\", \"grader_payload\": \"{\\\"lesson_task_id\\\": \\\"view.13\\\"}\"}"} content
             return success
         except requests.exceptions.Timeout:
             return True
