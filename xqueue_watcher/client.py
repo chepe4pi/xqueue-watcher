@@ -141,7 +141,7 @@ class XQueueClient:
         content = json.loads(content)
         success = []
         for handler in self.handlers:
-            content['course_id'] = self.queue_name
+            content['xqueue_header']['course_id'] = self.queue_name
             result = handler(content)
             if result:
                 reply = {'xqueue_body': json.dumps(result),
@@ -160,15 +160,15 @@ class XQueueClient:
             if success:
                 self.processing = True
                 success = self._handle_submission(content)
-# {"xqueue_header": "{\"submission_id\": 554475, \"submission_key\": \"df1803148682486836697ff600513ec4\",
-# \"stepik_user_id\": 415832026, \"stepik_submission_id\": 1250338561}", "xqueue_files": "",
-# "xqueue_body": "{\"student_response\": \"from django.http import HttpResponse\\ndef view_13(request):\\n
-# email = ''\\n    if request.method == 'POST':\\n
-# email = request.POST.get('email')\\n    elif request.method == 'GET':\\n
-# email = request.GET.get('email')\\n\\n    if email and ' ' not in email and '@'
-# in email and '.' in email:\\n
-# return HttpResponse('\\u0415\\u043c\\u0430\\u0439\\u043b \\u0432 \\u043f\\u043e\\u0440\\u044f\\u0434\\u0435')\\n
-# else:\\n        return HttpResponse('')\", \"grader_payload\": \"{\\\"lesson_task_id\\\": \\\"view.13\\\"}\"}"} content
+            # {"xqueue_header": "{\"submission_id\": 554475, \"submission_key\": \"df1803148682486836697ff600513ec4\",
+            # \"stepik_user_id\": 415832026, \"stepik_submission_id\": 1250338561}", "xqueue_files": "",
+            # "xqueue_body": "{\"student_response\": \"from django.http import HttpResponse\\ndef view_13(request):\\n
+            # email = ''\\n    if request.method == 'POST':\\n
+            # email = request.POST.get('email')\\n    elif request.method == 'GET':\\n
+            # email = request.GET.get('email')\\n\\n    if email and ' ' not in email and '@'
+            # in email and '.' in email:\\n
+            # return HttpResponse('\\u0415\\u043c\\u0430\\u0439\\u043b \\u0432 \\u043f\\u043e\\u0440\\u044f\\u0434\\u0435')\\n
+            # else:\\n        return HttpResponse('')\", \"grader_payload\": \"{\\\"lesson_task_id\\\": \\\"view.13\\\"}\"}"} content
             return success
         except requests.exceptions.Timeout:
             return True
@@ -188,10 +188,10 @@ class XQueueClient:
                 time.sleep(self.login_poll_interval)
                 if not self._login():
                     log.error("Still could not log in to %s (%s:%s) tries: %d",
-                        self.queue_name,
-                        self.username,
-                        self.password,
-                        num_tries)
+                              self.queue_name,
+                              self.username,
+                              self.password,
+                              num_tries)
                 else:
                     break
         while self.running:
