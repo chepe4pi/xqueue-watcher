@@ -95,7 +95,6 @@ class Grader:
         self.fork_per_item = fork_per_item
 
     def __call__(self, content):
-        content['xqueue_header']['course_id'] = self.queue_name
         if self.fork_per_item:
             q = multiprocessing.Queue()
             proc = multiprocessing.Process(target=self.process_item, args=(content, q))
