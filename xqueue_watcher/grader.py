@@ -96,6 +96,7 @@ class Grader:
 
     def __call__(self, content):
         self.course_id = content['course_id']
+        content['xqueue_header']['course_id'] = self.queue_name
         if self.fork_per_item:
             q = multiprocessing.Queue()
             proc = multiprocessing.Process(target=self.process_item, args=(content, q))
@@ -109,7 +110,8 @@ class Grader:
         else:
             return self.process_item(content)
 
-    def grade(self, grader_path, grader_config, student_response):
+    def grade(self, grader_path, grader_config, student_response,
+              stepik_user_id, course_id):
         lesson_task_id = grader_config.get("lesson_task_id", None)
         if not lesson_task_id:
             self.log.error("please provide lesson_task_id in grader_payload")
@@ -128,10 +130,18 @@ class Grader:
             else:
                 auth_key_url = os.environ.get('AUTH_KEY', '123')
 
+            headers = {
+                'COURSE_ID': course_id,
+                'STEPIK_USER_ID': stepik_user_id,
+                'AUTH_KEY': auth_key_url,  # Set the AUTH_KEY in the Authorization header
+                'Content-Type': 'application/json'  # Set the content type to JSON
+            }
+
             response = requests.post(
                 f'{grader_url}/grade/',
                 json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
-                      'AUTH_KEY': f'{auth_key_url}'}
+                      'AUTH_KEY': f'{auth_key_url}'},
+                headers=headers
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
@@ -165,7 +175,10 @@ class Grader:
             relative_grader_path = ""
             grader_path = (self.grader_root / relative_grader_path).abspath()
             start = time.time()
-            results = self.grade(grader_path, grader_config, student_response)
+            results = self.grade(grader_path, grader_config, student_response,
+                                 stepik_user_id=content['xqueue_header']['stepik_user_id'],
+                                 course_id=content['xqueue_header']['course_id'],
+                                 )
 
             statsd.histogram('xqueuewatcher.grading-time', time.time() - start)
 
