@@ -173,6 +173,8 @@ class Grader:
             relative_grader_path = ""
             grader_path = (self.grader_root / relative_grader_path).abspath()
             start = time.time()
+
+            content = json.loads(content)
             results = self.grade(grader_path, grader_config, student_response,
                                  stepik_user_id=content['xqueue_header']['stepik_user_id'],
                                  course_id=content['xqueue_header']['course_id'],
