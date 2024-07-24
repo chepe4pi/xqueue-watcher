@@ -179,7 +179,7 @@ class Grader:
             print(headers, 'headers')
             results = self.grade(grader_path, grader_config, student_response,
                                  stepik_user_id=content['xqueue_header']['stepik_user_id'],
-                                 course_id=content['xqueue_header']['course_id'],
+                                 course_id=content['course_id'],
                                  )
 
             statsd.histogram('xqueuewatcher.grading-time', time.time() - start)

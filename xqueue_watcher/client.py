@@ -141,7 +141,7 @@ class XQueueClient:
         content = json.loads(content)
         success = []
         for handler in self.handlers:
-            content['xqueue_header']['course_id'] = self.queue_name
+            content['course_id'] = self.queue_name
             result = handler(content)
             if result:
                 reply = {'xqueue_body': json.dumps(result),
