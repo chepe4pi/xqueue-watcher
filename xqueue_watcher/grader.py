@@ -174,8 +174,10 @@ class Grader:
             grader_path = (self.grader_root / relative_grader_path).abspath()
             start = time.time()
 
+            headers = json.loads((content['xqueue_header']))
+            print(headers, 'headers')
             results = self.grade(grader_path, grader_config, student_response,
-                                 stepik_user_id=content['xqueue_header']['stepik_user_id'],
+                                 stepik_user_id=headers['stepik_user_id'],
                                  course_id=content['course_id'],
                                  )
 
