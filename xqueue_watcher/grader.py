@@ -129,15 +129,16 @@ class Grader:
                 auth_key_url = os.environ.get('AUTH_KEY', '123')
 
             headers = {
-                'COURSE_ID': course_id,
-                'STEPIK_USER_ID': stepik_user_id,
-                'AUTH_KEY': auth_key_url,  # Set the AUTH_KEY in the Authorization header
                 'Content-Type': 'application/json'  # Set the content type to JSON
             }
 
             response = requests.post(
                 f'{grader_url}/grade/',
-                json={'lesson_task_id': lesson_task_id, 'student_response': student_response},
+                json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
+                      'COURSE_ID': course_id,
+                      'STEPIK_USER_ID': stepik_user_id,
+                      'AUTH_KEY': auth_key_url,
+                      },
                 headers=headers
             )
             print(response.json())
