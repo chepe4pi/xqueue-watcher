@@ -141,6 +141,7 @@ class XQueueClient:
         content = json.loads(content)
         success = []
         for handler in self.handlers:
+            content['course_id'] = self.queue_name
             result = handler(content)
             if result:
                 reply = {'xqueue_body': json.dumps(result),
@@ -158,7 +159,6 @@ class XQueueClient:
             success, content = self._request('get', '/xqueue/get_submission/', params=get_params)
             if success:
                 self.processing = True
-                content['course_id'] = self.queue_name
                 success = self._handle_submission(content)
 # {"xqueue_header": "{\"submission_id\": 554475, \"submission_key\": \"df1803148682486836697ff600513ec4\",
 # \"stepik_user_id\": 415832026, \"stepik_submission_id\": 1250338561}", "xqueue_files": "",
