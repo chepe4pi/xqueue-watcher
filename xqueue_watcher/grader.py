@@ -137,10 +137,10 @@ class Grader:
 
             response = requests.post(
                 f'{grader_url}/grade/',
-                json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
-                      'AUTH_KEY': f'{auth_key_url}'},
+                json={'lesson_task_id': lesson_task_id, 'student_response': student_response},
                 headers=headers
             )
+            print(response.json())
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             self.log.error(f"HTTP Request failed: {e}")
