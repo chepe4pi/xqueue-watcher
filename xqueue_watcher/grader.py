@@ -138,6 +138,7 @@ class Grader:
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             self.log.error(f"HTTP Request failed: {e}")
+            print(f"HTTP Request failed: {e}")
             return {'score': 0, 'msg': "Сори, проблема на нашей стороне, мы уже разбираемся!", 'correct': None}
 
         return response.json()
