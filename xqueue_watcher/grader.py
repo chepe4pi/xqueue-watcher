@@ -96,6 +96,7 @@ class Grader:
 
     def __call__(self, content):
         self.stepik_user_id = content['stepik_user_id']
+        self.course_id = content['course_id']
         if self.fork_per_item:
             q = multiprocessing.Queue()
             proc = multiprocessing.Process(target=self.process_item, args=(content, q))
@@ -131,7 +132,8 @@ class Grader:
             response = requests.post(
                 f'{grader_url}/grade/',
                 json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
-                      'AUTH_KEY': f'{auth_key_url}', 'stepik_user_id': self.stepik_user_id},
+                      'AUTH_KEY': f'{auth_key_url}', 'stepik_user_id': self.stepik_user_id,
+                      'course_id': self.course_id}
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
