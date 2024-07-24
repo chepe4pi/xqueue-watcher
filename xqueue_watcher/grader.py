@@ -95,6 +95,7 @@ class Grader:
         self.fork_per_item = fork_per_item
 
     def __call__(self, content):
+        print(content, 'content')
         self.stepik_user_id = content['stepik_user_id']
         self.course_id = content['course_id']
         if self.fork_per_item:
