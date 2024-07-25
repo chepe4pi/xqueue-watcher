@@ -132,16 +132,14 @@ class Grader:
                 'Content-Type': 'application/json'  # Set the content type to JSON
             }
 
-            response = requests.post(
-                f'{grader_url}/grade/',
-                json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
-                      'COURSE_ID': course_id,
-                      'STEPIK_USER_ID': stepik_user_id,
-                      'AUTH_KEY': auth_key_url,
-                      },
-                headers=headers
-            )
-            print(response.json())
+            response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id, stepik_user_id,
+                                        student_response)
+            if response.status_code == 503:
+                time.sleep(30)
+                response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id,
+                                            stepik_user_id,
+                                            student_response)
+
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             self.log.error(f"HTTP Request failed: {e}")
@@ -149,6 +147,19 @@ class Grader:
             return {'score': 0, 'msg': "Сори, проблема на нашей стороне, мы уже разбираемся!", 'correct': None}
 
         return response.json()
+
+    def call_grader(self, auth_key_url, course_id, grader_url, headers, lesson_task_id, stepik_user_id,
+                    student_response):
+        response = requests.post(
+            f'{grader_url}/grade/',
+            json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
+                  'COURSE_ID': course_id,
+                  'STEPIK_USER_ID': stepik_user_id,
+                  'AUTH_KEY': auth_key_url,
+                  },
+            headers=headers
+        )
+        return response
 
     def process_item(self, content, queue=None):
         try:
