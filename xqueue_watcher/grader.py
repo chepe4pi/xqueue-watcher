@@ -141,6 +141,7 @@ class Grader:
                                                 stepik_user_id, stepik_submission_id,
                                                 student_response)
                     if response.status_code == 102:
+                        time.sleep(1)
                         print('WAIT')
                     else:
                         print('DONE')
@@ -152,6 +153,7 @@ class Grader:
             print(f"HTTP Request failed: {e}")
             return {'score': 0, 'msg': "Сори, проблема на нашей стороне, мы уже разбираемся!", 'correct': None}
 
+        print(response)
         return response.json()
 
     def call_grader(self, auth_key_url, course_id, grader_url, headers, lesson_task_id, stepik_user_id, stepik_submission_id,
