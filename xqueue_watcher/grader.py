@@ -141,7 +141,7 @@ class Grader:
                                                 stepik_user_id, stepik_submission_id,
                                                 student_response)
                     if response.status_code == 102:
-                        time.sleep(1)
+                        time.sleep(2)
                         print('WAIT')
                     else:
                         print('DONE')
