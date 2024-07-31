@@ -136,7 +136,7 @@ class Grader:
                                         stepik_submission_id,
                                         student_response)
             if response.status_code == 503:
-                for x in range(10):
+                for x in range(30):
                     response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id,
                                                 stepik_user_id, stepik_submission_id,
                                                 student_response)
@@ -147,6 +147,10 @@ class Grader:
                         print('DONE')
                         break
 
+            if response.status_code == 102:
+                self.log.error("HTTP Request failed with 102")
+                print("HTTP Request failed with 102")
+                return {'score': 0, 'msg': "Сори, проблема на нашей стороне, мы уже разбираемся!", 'correct': None}
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             self.log.error(f"HTTP Request failed: {e}")
