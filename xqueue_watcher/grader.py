@@ -137,7 +137,6 @@ class Grader:
                                         student_response)
             if response.status_code == 503:
                 for x in range(10):
-                    time.sleep(2)
                     response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id,
                                                 stepik_user_id, stepik_submission_id,
                                                 student_response)
