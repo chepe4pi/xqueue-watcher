@@ -109,7 +109,7 @@ class Grader:
             return self.process_item(content)
 
     def grade(self, grader_path, grader_config, student_response,
-              stepik_user_id, course_id):
+              stepik_user_id, stepik_submission_id, course_id):
         lesson_task_id = grader_config.get("lesson_task_id", None)
         if not lesson_task_id:
             self.log.error("please provide lesson_task_id in grader_payload")
@@ -133,12 +133,18 @@ class Grader:
             }
 
             response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id, stepik_user_id,
+                                        stepik_submission_id,
                                         student_response)
             if response.status_code == 503:
-                time.sleep(30)
-                response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id,
-                                            stepik_user_id,
-                                            student_response)
+                for x in xrange(10):
+                    time.sleep(2)
+                    response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id,
+                                                stepik_user_id, stepik_submission_id,
+                                                student_response)
+                    if response.status_code == 102:
+                        continue
+                    if response.status_code == 200:
+                        break
 
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
@@ -148,13 +154,14 @@ class Grader:
 
         return response.json()
 
-    def call_grader(self, auth_key_url, course_id, grader_url, headers, lesson_task_id, stepik_user_id,
+    def call_grader(self, auth_key_url, course_id, grader_url, headers, lesson_task_id, stepik_user_id, stepik_submission_id,
                     student_response):
         response = requests.post(
             f'{grader_url}/grade/',
             json={'lesson_task_id': lesson_task_id, 'student_response': student_response,
                   'COURSE_ID': course_id,
                   'STEPIK_USER_ID': stepik_user_id,
+                  'STEPIK_SUBMISSION_ID': stepik_submission_id,
                   'AUTH_KEY': auth_key_url,
                   },
             headers=headers
@@ -189,6 +196,7 @@ class Grader:
             headers = json.loads((content['xqueue_header']))
             results = self.grade(grader_path, grader_config, student_response,
                                  stepik_user_id=str(headers['stepik_user_id']),
+                                 stepik_submission_id=str(headers['stepik_submission_id']),
                                  course_id=content['course_id'],
                                  )
 
