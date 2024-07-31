@@ -142,9 +142,10 @@ class Grader:
                                                 stepik_user_id, stepik_submission_id,
                                                 student_response)
                     if response.status_code == 102:
-                        continue
+                        print('WAIT')
                     if response.status_code == 200:
-                        break
+                        print('DONE')
+                        return response.json()
 
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
