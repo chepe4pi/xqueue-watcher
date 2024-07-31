@@ -142,9 +142,9 @@ class Grader:
                                                 student_response)
                     if response.status_code == 102:
                         print('WAIT')
-                    if response.status_code == 200:
+                    else:
                         print('DONE')
-                        return response.json()
+                        break
 
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
