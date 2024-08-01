@@ -135,14 +135,22 @@ class Grader:
             response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id, stepik_user_id,
                                         stepik_submission_id,
                                         student_response)
-            if response.status_code == 503:
+            first_sleep = None
+            if response.status_code == 102:
+                first_sleep = 40
+            if response.status_code in [503, 102]:
                 for x in range(30):
                     response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id,
                                                 stepik_user_id, stepik_submission_id,
                                                 student_response)
                     if response.status_code == 102:
-                        time.sleep(2)
-                        print('WAIT')
+                        if first_sleep:
+                            print('WAIT 40 sec')
+                            time.sleep(first_sleep)
+                            first_sleep = None
+                        else:
+                            time.sleep(2)
+                        print('WAIT 2 sec')
                     else:
                         print('DONE')
                         break
