@@ -137,7 +137,7 @@ class Grader:
                                         student_response)
             first_sleep = None
             if response.status_code == 102:
-                first_sleep = 40
+                first_sleep = 30
             if response.status_code in [503, 102]:
                 for x in range(30):
                     response = self.call_grader(auth_key_url, course_id, grader_url, headers, lesson_task_id,
@@ -145,7 +145,7 @@ class Grader:
                                                 student_response)
                     if response.status_code == 102:
                         if first_sleep:
-                            print('WAIT 40 sec')
+                            print('WAIT 30 sec')
                             time.sleep(first_sleep)
                             first_sleep = None
                         else:
