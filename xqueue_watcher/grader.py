@@ -149,8 +149,8 @@ class Grader:
                             time.sleep(first_sleep)
                             first_sleep = None
                         else:
-                            time.sleep(2)
-                        print('WAIT 2 sec')
+                            time.sleep(3)
+                        print('WAIT 3 sec')
                     else:
                         print('DONE')
                         break
